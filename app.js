@@ -4,9 +4,16 @@ var activerPlayer;
 var scores;
 var roundScore;
 
+// status variable for game 
+var isNewGame = false;
+
+
 initGame();
 // New game 
 function initGame(){
+    // begin status
+    isNewGame = true;
+
     // Тоглогчийн ээлжийг хадгалах хувьсагч, negdugeer 0, hoyordugaar 1 gj
     activerPlayer = 0;
     // Тоглогчдын цуглуулсан оноог хадгалах хувьсагч
@@ -28,46 +35,52 @@ function initGame(){
 
     document.querySelector('.player-0-panel').classList.remove('active');
     document.querySelector('.player-1-panel').classList.remove('active');
-    
+
     document.querySelector('.player-0-panel').classList.add('active');
 };
 
 // dice roller event listener
 document.querySelector('.btn-roll').addEventListener('click', function(){
-    // random number between 1 and 6 
-    var diceNumber = Math.floor(Math.random() * 6) + 1;
-    // display the picture of dice which default
-    diceDom.style.display = "block"; 
-    // display the picture of dice which selected
-    diceDom.src = 'dice-' + diceNumber + '.png'; 
+    if(isNewGame){
+        // random number between 1 and 6 
+        var diceNumber = Math.floor(Math.random() * 6) + 1;
+        // display the picture of dice which default
+        diceDom.style.display = "block"; 
+        // display the picture of dice which selected
+        diceDom.src = 'dice-' + diceNumber + '.png'; 
 
-    // increment number if it is not equal to 1
-    if(diceNumber !== 1){
-        // add number to the current roundScore
-        roundScore = roundScore + diceNumber;
-        document.getElementById('current-' + activerPlayer).textContent = roundScore;
-    }else{
-        // if 1
-        swithToNextPlayer();
-
+        // increment number if it is not equal to 1
+        if(diceNumber !== 1){
+            // add number to the current roundScore
+            roundScore = roundScore + diceNumber;
+            document.getElementById('current-' + activerPlayer).textContent = roundScore;
+        }else{
+            // if 1
+            swithToNextPlayer();
+        }
     }
 
 });
 
 // event listener for HOLD button
 document.querySelector('.btn-hold').addEventListener('click', function(){
-    // sum up the current player's score
-    scores[activerPlayer] = scores[activerPlayer] + roundScore;
-    // display the score
-    document.getElementById('score-'+activerPlayer).textContent = scores[activerPlayer];
-    // the player win or not?
-    if(scores[activerPlayer] >= 10){
-        // display the winenr text
-        document.getElementById('name-'+activerPlayer).textContent = "WINNER!!!";
-        document.querySelector('.player-' + activerPlayer + '-panel').classList.add('winner');
-        document.querySelector('.player-' + activerPlayer + '-panel').classList.remove('active');
-    } else{
-        swithToNextPlayer();
+    if(isNewGame){
+        // sum up the current player's score
+        scores[activerPlayer] = scores[activerPlayer] + roundScore;
+        // display the score
+        document.getElementById('score-'+activerPlayer).textContent = scores[activerPlayer];
+        // the player win or not?
+        if(scores[activerPlayer] >= 10){
+            // display the winenr text
+            document.getElementById('name-'+activerPlayer).textContent = "WINNER!!!";
+            document.querySelector('.player-' + activerPlayer + '-panel').classList.add('winner');
+            document.querySelector('.player-' + activerPlayer + '-panel').classList.remove('active');
+            //game status
+            isNewGame = false;
+
+        } else{
+            swithToNextPlayer();
+        }
     }
 });
 
