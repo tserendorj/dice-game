@@ -1,18 +1,36 @@
-// Тоглогчийн ээлжийг хадгалах хувьсагч, negdugeer 0, hoyordugaar 1 gj
-var activerPlayer = 0;
-// Тоглогчдын цуглуулсан оноог хадгалах хувьсагч
-var scores = [0, 0];
-// Тоглогчийн ээлжиндээ цуглуулж байгаа оноог хадгалах хувьсагч
-var roundScore = 0;
-
-// prepare for start
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
-document.getElementById('current-1').textContent = '0';
-
+// global variables
 var diceDom = document.querySelector('.dice');
-diceDom.style.display = "none";
+var activerPlayer;
+var scores;
+var roundScore;
+
+initGame();
+// New game 
+function initGame(){
+    // Тоглогчийн ээлжийг хадгалах хувьсагч, negdugeer 0, hoyordugaar 1 gj
+    activerPlayer = 0;
+    // Тоглогчдын цуглуулсан оноог хадгалах хувьсагч
+    scores = [0, 0];
+    // Тоглогчийн ээлжиндээ цуглуулж байгаа оноог хадгалах хувьсагч
+    roundScore = 0;
+
+    // prepare for start
+    document.getElementById('score-0').textContent = '0';
+    document.getElementById('score-1').textContent = '0';
+    document.getElementById('current-0').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+
+    diceDom.style.display = "none";
+    document.getElementById('name-0').textContent = "Player 1";
+    document.getElementById('name-1').textContent = "Player 2";
+    document.querySelector('.player-0-panel').classList.remove('winner');
+    document.querySelector('.player-1-panel').classList.remove('winner');
+
+    document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
+    
+    document.querySelector('.player-0-panel').classList.add('active');
+};
 
 // dice roller event listener
 document.querySelector('.btn-roll').addEventListener('click', function(){
@@ -43,7 +61,7 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     // display the score
     document.getElementById('score-'+activerPlayer).textContent = scores[activerPlayer];
     // the player win or not?
-    if(scores[activerPlayer] >= 100){
+    if(scores[activerPlayer] >= 10){
         // display the winenr text
         document.getElementById('name-'+activerPlayer).textContent = "WINNER!!!";
         document.querySelector('.player-' + activerPlayer + '-panel').classList.add('winner');
@@ -52,8 +70,6 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
         swithToNextPlayer();
     }
 });
-
-
 
 // This function switches the next player
 function swithToNextPlayer(){
@@ -72,6 +88,4 @@ function swithToNextPlayer(){
 }
 
 // event listener for new game button
-document.querySelector('.btn-new').addEventListener('click', function(){
-    
-})
+document.querySelector('.btn-new').addEventListener('click', initGame);
